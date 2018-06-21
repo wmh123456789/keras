@@ -341,6 +341,32 @@ PAGES = [
 ROOT = 'http://keras.io/'
 
 
+def get_earliest_class_that_defined_member(member, cls):
+    ancestors = get_classes_ancestors([cls])
+    result = None
+    for ancestor in ancestors:
+        if member in dir(ancestor):
+            result = ancestor
+    if not result:
+        return cls
+    return result
+
+
+def get_classes_ancestors(classes):
+    ancestors = []
+    for cls in classes:
+        ancestors += cls.__bases__
+    filtered_ancestors = []
+    for ancestor in ancestors:
+        if ancestor.__name__ in ['object']:
+            continue
+        filtered_ancestors.append(ancestor)
+    if filtered_ancestors:
+        return filtered_ancestors + get_classes_ancestors(filtered_ancestors)
+    else:
+        return filtered_ancestors
+
+
 def get_function_signature(function, method=True):
     wrapped = getattr(function, '_original_function', None)
     if wrapped is None:
@@ -388,7 +414,7 @@ def get_class_signature(cls):
 
 
 def post_process_signature(signature):
-    parts = re.split(r'\.(?!\d)', signature)
+    parts = re.split('\.(?!\d)', signature)
     if len(parts) >= 4:
         if parts[1] == 'layers':
             signature = 'keras.layers.' + '.'.join(parts[3:])
@@ -433,7 +459,7 @@ def code_snippet(snippet):
 
 
 def count_leading_spaces(s):
-    ws = re.search(r'\S', s)
+    ws = re.search('\S', s)
     if ws:
         return ws.start()
     else:
@@ -570,6 +596,7 @@ for subdir, dirs, fnames in os.walk('templates'):
             shutil.copy(fpath, new_fpath)
 
 
+# Take care of index page.
 def read_file(path):
     with open(path) as f:
         return f.read()
@@ -590,32 +617,13 @@ def render_function(function, method=True):
     subblocks = []
     signature = get_function_signature(function, method=method)
     signature = signature.replace(function.__module__ + '.', '')
-    subblocks.append('### ' + function.__name__ + '\n')
+    level = 3
+    subblocks.append('#' * level + ' ' + function.__name__ + '\n')
     subblocks.append(code_snippet(signature))
     docstring = function.__doc__
     if docstring:
         subblocks.append(process_docstring(docstring))
     return '\n\n'.join(subblocks)
-
-
-def read_page_data(page_data, type):
-    assert type in ['classes', 'functions']
-    data = page_data.get(type, [])
-    for module in page_data.get('all_module_{}'.format(type), []):
-        module_data = []
-        for name in dir(module):
-            if name[0] == '_' or name in EXCLUDE:
-                continue
-            module_member = getattr(module, name)
-            if (inspect.isclass(module_member) and type == 'classes' or
-               inspect.isfunction(module_member) and type == 'functions'):
-                instance = module_member
-                if module.__name__ in instance.__module__:
-                    if instance not in module_data:
-                        module_data.append(instance)
-        module_data.sort(key=lambda x: id(x))
-        data += module_data
-    return data
 
 
 if __name__ == '__main__':
@@ -627,9 +635,22 @@ if __name__ == '__main__':
 
     print('Generating docs for Keras %s.' % keras.__version__)
     for page_data in PAGES:
-        classes = read_page_data(page_data, 'classes')
-
         blocks = []
+        classes = page_data.get('classes', [])
+        for module in page_data.get('all_module_classes', []):
+            module_classes = []
+            for name in dir(module):
+                if name[0] == '_' or name in EXCLUDE:
+                    continue
+                module_member = getattr(module, name)
+                if inspect.isclass(module_member):
+                    cls = module_member
+                    if cls.__module__ == module.__name__:
+                        if cls not in module_classes:
+                            module_classes.append(cls)
+            module_classes.sort(key=lambda x: id(x))
+            classes += module_classes
+
         for element in classes:
             if not isinstance(element, (list, tuple)):
                 element = (element, [])
@@ -654,7 +675,20 @@ if __name__ == '__main__':
                     [render_function(method, method=True) for method in methods]))
             blocks.append('\n'.join(subblocks))
 
-        functions = read_page_data(page_data, 'functions')
+        functions = page_data.get('functions', [])
+        for module in page_data.get('all_module_functions', []):
+            module_functions = []
+            for name in dir(module):
+                if name[0] == '_' or name in EXCLUDE:
+                    continue
+                module_member = getattr(module, name)
+                if inspect.isfunction(module_member):
+                    function = module_member
+                    if module.__name__ in function.__module__:
+                        if function not in module_functions:
+                            module_functions.append(function)
+            module_functions.sort(key=lambda x: id(x))
+            functions += module_functions
 
         for function in functions:
             blocks.append(render_function(function, method=False))

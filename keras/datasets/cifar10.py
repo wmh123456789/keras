@@ -17,9 +17,12 @@ def load_data():
     # Returns
         Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     """
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
+    # dirname = 'cifar-10-batches-py'
+    # origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    # path = get_file(dirname, origin=origin, untar=True)
+
+    # For my PC
+    path = "E:\= Workspaces\keras\dataset\cifar-10-batches-py"
 
     num_train_samples = 50000
 
