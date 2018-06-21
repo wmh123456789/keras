@@ -48,7 +48,7 @@ subtract_pixel_mean = True
 # ResNet164 |27(18)| -----     | 94.07     | -----     | 94.54     | ---(---)
 # ResNet1001| (111)| -----     | 92.39     | -----     | 95.08+-.14| ---(---)
 # ---------------------------------------------------------------------------
-n = 6
+n = 12
 
 # Model version
 # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
