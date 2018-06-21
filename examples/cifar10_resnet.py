@@ -48,7 +48,7 @@ subtract_pixel_mean = True
 # ResNet164 |27(18)| -----     | 94.07     | -----     | 94.54     | ---(---)
 # ResNet1001| (111)| -----     | 92.39     | -----     | 95.08+-.14| ---(---)
 # ---------------------------------------------------------------------------
-n = 12
+n = 6
 
 # Model version
 # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
@@ -335,7 +335,7 @@ else:
     model = resnet_v1(input_shape=input_shape, depth=depth)
 
 # Set multi-GPU   by wmh
-model = multi_gpu_model(model, 1)
+# model = multi_gpu_model(model, 2)
 
 model.compile(loss='categorical_crossentropy',
               optimizer=Adam(lr=lr_schedule(0)),
