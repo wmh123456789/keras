@@ -60,7 +60,7 @@ opt = keras.optimizers.rmsprop(lr=0.0001, decay=1e-6)
 
 
 # Set multi-GPU   by wmh
-model = multi_gpu_model(model, 2)
+model = multi_gpu_model(model, 1)
 
 # Let's train the model using RMSprop
 model.compile(loss='categorical_crossentropy',

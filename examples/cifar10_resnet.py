@@ -335,7 +335,7 @@ else:
     model = resnet_v1(input_shape=input_shape, depth=depth)
 
 # Set multi-GPU   by wmh
-model = multi_gpu_model(model, 2)
+model = multi_gpu_model(model, 1)
 
 model.compile(loss='categorical_crossentropy',
               optimizer=Adam(lr=lr_schedule(0)),
