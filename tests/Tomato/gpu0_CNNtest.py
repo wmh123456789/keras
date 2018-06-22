@@ -18,7 +18,7 @@ import os
 #  Assign GPU #
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-batch_size = 32
+batch_size = 64
 num_classes = 10
 epochs = 100
 data_augmentation = True

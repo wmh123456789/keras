@@ -26,7 +26,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 # Training parameters
-batch_size = 32  # orig paper trained all networks with batch_size=128
+batch_size = 64  # orig paper trained all networks with batch_size=128
 epochs = 200
 data_augmentation = True
 num_classes = 10
