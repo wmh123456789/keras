@@ -80,10 +80,15 @@ y_train_lt5 = y_train[y_train < 5]
 x_test_lt5 = x_test[y_test < 5]
 y_test_lt5 = y_test[y_test < 5]
 
+# x_train_gte5 = x_train[y_train >= 5]
+# y_train_gte5 = y_train[y_train >= 5] - 5
+# x_test_gte5 = x_test[y_test >= 5]
+# y_test_gte5 = y_test[y_test >= 5] - 5
+
 x_train_gte5 = x_train[y_train >= 5]
-y_train_gte5 = y_train[y_train >= 5] - 5
+y_train_gte5 = y_train[y_train >= 5]
 x_test_gte5 = x_test[y_test >= 5]
-y_test_gte5 = y_test[y_test >= 5] - 5
+y_test_gte5 = y_test[y_test >= 5]
 
 # define two groups of layers: feature (convolutions) and classification (dense)
 feature_layers = [

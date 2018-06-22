@@ -13,9 +13,9 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import RMSprop
 
-batch_size = 128
+batch_size = 256
 num_classes = 10
-epochs = 20
+epochs = 3
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -54,3 +54,11 @@ history = model.fit(x_train, y_train,
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+
+#  For test  by wmh
+x_pre = x_test[:32]
+y_pre = y_test[:32]
+res = model.predict(x_pre, batch_size = 16)
+res = (res > 0.6) *1
+cor = sum(sum(abs(res-y_pre)))
+print("Correct : %d", cor)
