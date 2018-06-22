@@ -22,7 +22,7 @@ from keras import backend as K
 now = datetime.datetime.now
 
 batch_size = 128
-num_classes = 5
+num_classes = 10
 epochs = 5
 
 # input image dimensions
