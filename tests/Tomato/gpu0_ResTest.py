@@ -345,7 +345,7 @@ print(model_type)
 
 # Prepare model model saving directory.
 save_dir = os.path.join(os.getcwd(), 'saved_models')
-model_name = 'cifar10_%s_model.{epoch:03d}.h5' % model_type
+model_name = 'cifar10_%s_model0.{epoch:03d}.h5' % model_type
 if not os.path.isdir(save_dir):
     os.makedirs(save_dir)
 filepath = os.path.join(save_dir, model_name)
